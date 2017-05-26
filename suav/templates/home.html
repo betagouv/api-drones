@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<hr>
+<div class="tile is-ancestor">
+  <div class="tile is-vertical is-8">
+    <div class="tile">
+      <div class="tile is-parent is-vertical">
+        <article class="tile is-child notification">
+          <p class="title"><a href="{{ url_for('alluav') }}">Voir les drones</a></p>
+        </article>
+        <article class="tile is-child notification">
+          <p class="title">Mon compte</p>
+          <p class="subtitle">blah blah</p>
+        </article>
+      </div>
+      <div class="tile is-parent">
+        <article class="tile is-child notification">
+          <p class="title"><a href="{{ url_for('map') }}">Voir la carte</a></p>
+          <figure class="image">
+            <img src="{{ url_for('static', filename="img/map-preview.png")}}">
+          </figure>
+        </article>
+      </div>
+    </div>
+    <div class="tile is-parent">
+      <article class="tile is-child notification">
+        <div class="content">
+          <nav class="level">
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Drones enregistrés</p>
+                <p class="title">456K</p>
+              </div>
+            </div>
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Drones actifs</p>
+                <p class="title">123</p>
+              </div>
+            </div>
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Pilotes</p>
+                <p class="title">3456</p>
+              </div>
+            </div>
+          </nav>
+
+        </div>
+      </article>
+    </div>
+  </div>
+  <div class="tile is-parent">
+    <article class="tile is-child notification">
+      <div class="content">
+        <p class="title">API Drones</p>
+        <p class="subtitle">Expliquer ici ce qu'est l'API drones. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis nunc blandit, porta nisi vel, pretium dolor. Morbi quis eros vitae ex interdum viverra sit amet et risus. Donec pellentesque volutpat neque, quis sagittis dui tempor sit amet. Cras gravida faucibus dignissim. Morbi egestas libero malesuada, vulputate lacus eu, semper mi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus rutrum leo id turpis elementum, cursus scelerisque velit tempor. </p>
+        <div class="content">
+          <!-- Content -->
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+{% endblock main_content %}

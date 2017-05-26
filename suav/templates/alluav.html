@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<h1 class="title">Tous les drones</h1>
+{% for uav in uavs %}
+    {% include "elements/uav_card.html" %}
+    <hr>
+{% endfor %}
+{% endblock main_content %}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>sUAV - Aéronefs en vol</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
+
+
+
+</head>
+<body>
+
+
+
+<div id="mapid" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+<script>
+
+    var map = L.map('mapid').setView([46.73986, 2.30713], 7);
+
+    L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png', {
+        maxZoom: 18, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy;<a href="https://carto.com/attribution">CARTO</a>'
+    }).addTo(map);
+
+    L.tileLayer("http://{s}.tile.maps.openaip.net/geowebcache/service/tms/1.0.0/openaip_basemap@EPSG%3A900913@png/{z}/{x}/{y}.png", {
+        maxZoom: 14,
+        minZoom: 4,
+        tms: true,
+        detectRetina: true,
+        subdomains: '12',
+        format: 'image/png',
+        transparent: true,
+        opacity: 0.5
+    }).addTo(map);
+
+    L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}.png', {
+        maxZoom: 18, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy;<a href="https://carto.com/attribution">CARTO</a>'
+    }).addTo(map);
+
+
+    var Icon = L.icon({
+        iconUrl: '{{ url_for("static", filename="img/marker.png")}}',
+
+        iconSize: [30, 41],
+        iconAnchor: [15, 41]
+    });
+
+
+    function onEachFeature(feature, layer) {
+        if (feature.properties && feature.properties.id) {
+            layer.bindPopup('Immatriculation: ' + feature.properties.id + '<br>Hauteur: ' + feature.properties.height);
+        }
+    }
+    function pointToLayer(feature, latlng) {
+        return L.marker(latlng, {icon: Icon});
+    }
+
+    fetch('/positions')
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        L.geoJSON(data, {onEachFeature: onEachFeature}).addTo(map);
+    });
+
+</script>
+
+
+
+</body>
+</html>

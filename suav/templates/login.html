@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<h1 class="title">M'identifier</h1>
+<div class="box columns">
+  <div class="column">
+    <a href="{{ url_for('login', provider="france-connect") }}">
+      <img src="{{ url_for('static', filename="img/france-connect.png")}}">
+    </a>
+  </div>
+  <div class="column">
+    <a href="{{ url_for('login', provider="demo") }}">Utilisateur démo</a>
+  </div>
+</div>
+
+{% endblock main_content %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<h1 class="title">Mes drones
+<a class="button is-small is-primary" href="{{ url_for('register') }}"><span class="icon is-small"><i class="fa fa-plus"></i></span><span>Ajouter</span></a>
+</h1>
+{% for uav in uavs %}
+    {% include "elements/uav_card.html" %}
+    <hr>
+{% endfor %}
+{% endblock main_content %}

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title or "API drones démo" }}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.1/css/bulma.css">
+</head>
+<body>
+    {% include 'elements/nav.html' %}
+    <div class="container">
+        {% block main_content %}
+        {% endblock main_content %}
+    </div>
+</body>
+</html>

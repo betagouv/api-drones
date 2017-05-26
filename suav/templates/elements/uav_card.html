@@ -1,0 +1,58 @@
+<div class="card">
+  <header class="card-header">
+    <p class="card-header-title">
+      {{ uav }}
+    </p>
+    <a class="card-header-icon" title="Simuler le vol de ce drone">
+      <span class="icon" id="simulate-{{ uav.licence }}">
+        <i class="fa fa-paper-plane"></i>
+      </span>
+    </a>
+  </header>
+  <div class="card-content">
+    <div class="content">
+      <p>Immatriculation: {{ uav.licence }}</p>
+      <p>Fabricant: {{ uav.manufacturer }}</p>
+      <p>Modèle: {{ uav.model }}</p>
+      <p>Poids: {{ uav.weight }} g</p>
+    </div>
+  </div>
+  <footer class="card-footer">
+    <a class="card-footer-item">Voir</a>
+    <a class="card-footer-item">Modifier</a>
+    <a class="card-footer-item">Supprimer</a>
+  </footer>
+</div>
+
+<script type="text/javascript">
+var button = document.querySelector('#simulate-{{ uav.licence }}'),
+    icon = button.querySelector('.fa'),
+    id;
+button.onclick = function () {
+  console.log('click')
+  if (button.dataset.active) {
+    navigator.geolocation.clearWatch(id);
+    button.dataset.active = false;
+  } else {
+    button.dataset.active = true;
+    id = navigator.geolocation.watchPosition(function(position) {
+      var data = new FormData();
+      var data = {
+        lon: position.coords.longitude,
+        lat: position.coords.latitude,
+        alt: 300,
+        height: 80,
+        id: "{{ uav.licence }}"
+      }
+      fetch("/put", {
+        method: "PUT",
+        body: JSON.stringify(data)
+      });
+      console.log(position.coords.latitude, position.coords.longitude);
+    });
+  }
+  icon.classList.toggle("fa-paper-plane-o");
+}
+
+
+</script>

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<h1 class="title">Immatriculer un nouveau drone</h1>
+<form method="post" action="">
+    <div class="field">
+      <label class="label">Nom</label>
+      <p class="control has-icons-left has-icons-right">
+        <input class="input" type="text" placeholder="Nom" name="name">
+        <span class="icon is-small is-left">
+          <i class="fa fa-user"></i>
+        </span>
+      </p>
+    </div>
+    <div class="field">
+      <label class="label">Fabricant</label>
+      <p class="control has-icons-left has-icons-right">
+        <input class="input" type="text" placeholder="Fabricant" name="manufacturer">
+        <span class="icon is-small is-left">
+          <i class="fa fa-user"></i>
+        </span>
+      </p>
+    </div>
+    <div class="field">
+      <label class="label">Modèle</label>
+      <p class="control has-icons-left has-icons-right">
+        <input class="input" type="text" placeholder="Modèle" name="model">
+        <span class="icon is-small is-left">
+          <i class="fa fa-user"></i>
+        </span>
+      </p>
+    </div>
+    <div class="field">
+      <label class="label">Poids (en grammes)</label>
+      <p class="control has-icons-left has-icons-right">
+        <input class="input" type="text" placeholder="Poids" name="weight">
+        <span class="icon is-small is-left">
+          <i class="fa fa-user"></i>
+        </span>
+      </p>
+    </div>
+    <div class="field is-grouped">
+      <p class="control">
+        <button class="button is-primary">Submit</button>
+      </p>
+      <p class="control">
+        <button class="button is-link">Cancel</button>
+      </p>
+    </div>
+</form>
+{% endblock main_content %}
