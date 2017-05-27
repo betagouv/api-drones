@@ -25,18 +25,19 @@
 </div>
 
 <script type="text/javascript">
-var button = document.querySelector('#simulate-{{ uav.licence }}'),
-    icon = button.querySelector('.fa'),
-    id;
-button.onclick = function () {
-  console.log('click')
-  if (button.dataset.active) {
-    navigator.geolocation.clearWatch(id);
+var watchPositionIds = {};
+
+document.querySelector('#simulate-{{ uav.licence }}').onclick = function (event) {
+  var button = event.target.parentNode;
+  var icon = button.querySelector('.fa');
+  if (button.dataset.active === 'true') {
+    navigator.geolocation.clearWatch(watchPositionIds['{{ uav.licence }}']);
     button.dataset.active = false;
+    icon.classList.remove("fa-paper-plane-o");
   } else {
     button.dataset.active = true;
-    id = navigator.geolocation.watchPosition(function(position) {
-      var data = new FormData();
+    icon.classList.add("fa-paper-plane-o");
+    watchPositionIds['{{ uav.licence }}'] = navigator.geolocation.watchPosition(function(position) {
       var data = {
         lon: position.coords.longitude,
         lat: position.coords.latitude,
@@ -51,8 +52,5 @@ button.onclick = function () {
       console.log(position.coords.latitude, position.coords.longitude);
     });
   }
-  icon.classList.toggle("fa-paper-plane-o");
 }
-
-
 </script>
