@@ -5,7 +5,7 @@ from invoke import task
 
 
 def as_user(ctx, user, cmd, *args, **kwargs):
-    ctx.run('sudo --set-home --preserve-env --user {} '
+    ctx.run('sudo --set-home --preserve-env --user {} --login '
             '{}'.format(user, cmd), *args, **kwargs)
 
 
@@ -31,11 +31,13 @@ def cli(ctx, cmd):
 @task
 def system(ctx):
     ctx.run('sudo apt update')
-    ctx.run('sudo apt install redis-server python3 python3-dev '
-            'python-virtualenv build-essential git wget uwsgi '
+    ctx.run('sudo apt install python3 python3-dev software-properties-common '
+            'python-virtualenv build-essential git uwsgi '
             'uwsgi-plugin-python3 bzip2 nginx --yes')
+    ctx.run('sudo add-apt-repository ppa:chris-lea/redis-server')
+    ctx.run('sudo apt update')
+    ctx.run('sudo apt install redis-server --yes')
     ctx.run('sudo useradd -N suav -m -d /srv/suav/ || exit 0')
-    ctx.run('sudo chown suav:users /var/log/suav')
     ctx.run('sudo chsh -s /bin/bash suav')
     # Allow FLASK_APP env var to be passed through ssh.
     ctx.run('grep -q -r "^AcceptEnv FLASK_APP *" /etc/ssh/sshd_config '
@@ -51,12 +53,6 @@ def venv(ctx):
 
 
 @task
-def settings(ctx):
-    if ctx.settings:
-        sudo_put(ctx, ctx.settings, '/etc/default/suav', chown='suav:users')
-
-
-@task
 def http(ctx):
     sudo_put(ctx, 'fabfile/uwsgi_params', '/srv/suav/uwsgi_params')
     sudo_put(ctx, 'fabfile/uwsgi.ini', '/etc/uwsgi/apps-enabled/suav.ini')
@@ -68,7 +64,6 @@ def http(ctx):
 def bootstrap(ctx):
     system(ctx)
     venv(ctx)
-    settings(ctx)
     http(ctx)
 
 
@@ -80,8 +75,12 @@ def write_default(ctx):
 
 @task
 def deploy(ctx):
+    write_default(ctx)
+    as_suav(ctx, 'rm -rf /srv/suav/src')
+    cmd = 'git clone --branch fabfile --depth 1 https://github.com/etalab/api-drones /srv/suav/src'
+    as_suav(ctx, cmd)
+    as_suav(ctx, '/srv/suav/venv/bin/pip install git+https://github.com/andymccurdy/redis-py --upgrade')
     cli(ctx, 'initdb')
-    cmd = '/srv/suav/venv/bin/pip install git+https://github.com/etalab/api-drones --upgrade'
     restart(ctx)
 
 
@@ -89,3 +88,8 @@ def deploy(ctx):
 def restart(ctx):
     ctx.run('sudo systemctl restart uwsgi')
     ctx.run('sudo systemctl restart nginx')
+
+
+@task
+def log(ctx, lines=100):
+    ctx.run('tail -{lines} /var/log/uwsgi/app/suav.log'.format(lines=lines))
